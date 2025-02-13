@@ -36,7 +36,8 @@ The application's main window is divided into 4 different grids (or tabs) as fol
 - Table
 - Graph
 
-![Screenshot (12).png](../_resources/Screenshot%20%2812%29.png)
+![Tabs](https://github.com/Divya-dd03/RSSI-application/blob/main/images/Screenshot%20(12).png)
+
 
 ## **`Inputs`**
 
@@ -122,7 +123,9 @@ if scan_attempt > 0:
 
 Seen at the top right corner is our table where the populated devices will be listed giving us the details of the BLE devices such as RSSI, MAC id, name and manufacturing data.
 
-![b4bf3cd508b4b6b651e155907565bbe5.png](../_resources/b4bf3cd508b4b6b651e155907565bbe5.png)
+
+![Table](https://github.com/Divya-dd03/RSSI-application/blob/main/images/b4bf3cd508b4b6b651e155907565bbe5.png)
+
 
 If the device's name is unknown it will be returned as `None` and if the device's Manufacturing data is not available it will be returned as `{}`
 
@@ -134,11 +137,16 @@ The Graph table is where the target device's RSSI value is plotted against time 
 
 Once the "submit" button is hit, the inputs automatically fill in the graph's title making it easier for identification later.
 
-![113feeafc0c0df1d041864009ae3d30f.png](../_resources/113feeafc0c0df1d041864009ae3d30f.png)
+
+![Tabs](https://github.com/Divya-dd03/RSSI-application/blob/main/images/113feeafc0c0df1d041864009ae3d30f.png)
+
+
 
 The graph's visual options are diverse. The user can move the scales, enable or disable the grids, adjust grid's opacity, transform it into power spectrum (FFT), log x, log y, differentials (dy /dx), and y vs y', down sample, clip and much more. Right click on the graph tab to access all the above options.
 
-![f2ef7bc36ec1f71976d494ba1f51de0d.png](../_resources/f2ef7bc36ec1f71976d494ba1f51de0d.png)
+
+![Export](https://github.com/Divya-dd03/RSSI-application/blob/main/images/f2ef7bc36ec1f71976d494ba1f51de0d.png)
+
 
 The graphs can also be downloaded which allows much more customization and control over the data from this in-built "Export" tab.
 
