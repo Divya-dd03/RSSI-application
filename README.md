@@ -70,7 +70,7 @@ All the files has two parameters: RSSI values, Time stamps at which the RSSI is 
 
 All the files are saved under the following built-in naming convention:
 
-$$\text{<mac id>}\text{<distance>}\text{<scanning duration>}\text{.file format}$$
+< mac id >_< distance >m_< scanning duration >_m_s.file format}
 
 The user can wish to change the name.
 
