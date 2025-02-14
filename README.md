@@ -246,7 +246,7 @@ Before installing, ensure your system meets the following requirements:
 
 - [ ] Operating System: Windows 10/11, Linux, or macOS
 - [ ] Python Version: 3.8+
-- [ ] Bluetooth Adapter: Built-in or external BLE 4.0+
+- [ ] Bluetooth Adapter: Built-in BLE 4.0+
 - [ ] Required Python Libraries:
     - [ ] `bleak` (for BLE scanning)
     - [ ] `threading` & `asyncio` (for asynchronous operations)
