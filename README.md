@@ -71,7 +71,12 @@ All the files has two parameters: RSSI values, Time stamps at which the RSSI is 
 
 All the files are saved under the following built-in naming convention:
 
-< mac id >_< distance >m_< scanning duration >_m_s.file format}
+
+< mac id >_< distance >m_< scanning duration >_m_s.file format
+
+$$
+\text{<mac id>}\text{<distance>}\text{<scanning duration>}\text{.file format}
+$$
 
 The user can wish to change the name.
 
@@ -141,12 +146,13 @@ Once the "submit" button is hit, the inputs automatically fill in the graph's ti
 ![Tabs](https://github.com/Divya-dd03/RSSI-application/blob/main/images/113feeafc0c0df1d041864009ae3d30f.png)
 
 
-
 The graph's visual options are diverse. The user can move the scales, enable or disable the grids, adjust grid's opacity, transform it into power spectrum (FFT), log x, log y, differentials (dy /dx), and y vs y', down sample, clip and much more. Right click on the graph tab to access all the above options.
 
 
 ![Export](https://github.com/Divya-dd03/RSSI-application/blob/main/images/f2ef7bc36ec1f71976d494ba1f51de0d.png)
 
+
+The graph's visual options are diverse. The user can move the scales, enable or disable the grids, adjust grid's opacity, transform it into power spectrum (FFT), log x, log y, differentials (dy /dx), and y vs y', down sample, clip and much more. Right click on the graph tab to access all the above options.
 
 The graphs can also be downloaded which allows much more customization and control over the data from this in-built "Export" tab.
 

@@ -1,0 +1,64 @@
+# =======Print device discovered: name | addr | RSSI====================================================================
+
+# import asyncio
+# from bleak import BleakScanner
+#
+# # bluetooth device scanner
+# # (w): BLEDevice.rssi is deprecated and will be removed in a future version of Bleak, use AdvertisementData.rssi instead
+#
+# async def main1():
+#     devices = await BleakScanner.discover()
+#     for d in devices:
+#         # print name - address - rssi here.
+#         print(f"Dev: {d.name}, Addr: {d.address}, RSSI: {d.rssi} dBm")
+#
+# asyncio.run(main1())
+
+
+
+
+
+# with context manager
+# address = "c5:32:3f:4e:e2:b8"
+# MODEL_NBR_UUID = "2A24"
+#
+# async def main(address):
+#     async with BleakClient(address) as client:
+#         model_number = await client.read_gatt_char(MODEL_NBR_UUID)
+#         print("Model Number: {0}".format("".join(map(chr, model_number))))
+#
+# asyncio.run(main(address))
+
+# without context manager
+# address = "24:71:89:cc:09:05"
+# MODEL_NBR_UUID = "2A24"
+#
+# async def main(address):
+#     client = BleakClient(address)
+#     try:
+#         await client.connect()
+#         model_number = await client.read_gatt_char(MODEL_NBR_UUID)
+#         print("Model Number: {0}".format("".join(map(chr, model_number))))
+#     except Exception as e:
+#         print(e)
+#     finally:
+#         await client.disconnect()
+#
+# asyncio.run(main(address))
+
+# SECOND: Get the Target_device MAC address from the user
+# connect to the device by entering its MAC ID
+async def scan():
+    try:
+        await devices_in_vicinity()
+        Target_device = str(input("Enter the Target_device MAC ID: "))
+        return await BleakScanner.find_device_by_address(Target_device,20.0)
+        # device = await BleakScanner.find_device_by_address(args.address, cb=dict(use_bdaddr=args.macos_use_bdaddr)
+    except asyncio.BleakDeviceNotFoundError:
+        print ("ERROR! Device is not available for connection")
+
+async def connect(Target_device):
+    async with BleakClient(Target_device) as client:
+        data = await client.connect(Target_device)
+        print("received:", data)
+

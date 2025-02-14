@@ -1,0 +1,220 @@
+from PyQt6.QtCore import QThread, pyqtSignal
+from PyQt6.QtWidgets import QTableWidget, QTableWidgetItem
+import asyncio
+from RSSI_libs.Bluetooth_script1 import main  # import your main function
+
+class BluetoothWorker(QThread):
+    devices_found = pyqtSignal(list)  # signal to send data back to the main thread
+
+    def run(self):
+        # Run the async function within the thread
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        dev_list = loop.run_until_complete(main())  # get the result of the async main()
+        self.devices_found.emit(dev_list)  # emit the data back to the main thread
+
+class MyWindow:
+    def __init__(self):
+        # Initialize the table
+        self.tab3 = QTableWidget()
+        self.tab3.setColumnCount(4)
+        self.tab3.setRowCount(0)
+        self.tab3.setHorizontalHeaderLabels(["RSSI", "MAC ID", "Device name", "Manufuc.data"])
+        self.tab3.setColumnWidth(0, 70)
+        self.tab3.setColumnWidth(1, 100)
+        self.tab3.setColumnWidth(2, 150)
+        self.tab3.setColumnWidth(3, 700)
+
+        # Create worker thread for Bluetooth scan
+        self.worker = BluetoothWorker()
+        self.worker.devices_found.connect(self.update_table)  # connect the signal to update the table
+        self.worker.start()  # Start the worker thread
+
+    def update_table(self, dev_list):
+        # Update the table with scanned devices
+        self.tab3.setRowCount(len(dev_list))  # set the row count based on the number of devices
+
+        for row, (mac, rssi, name, manuf_data) in enumerate(dev_list):
+            self.tab3.setItem(row, 0, QTableWidgetItem(str(rssi)))
+            self.tab3.setItem(row, 1, QTableWidgetItem(mac))
+            self.tab3.setItem(row, 2, QTableWidgetItem(name if name else "Unknown"))
+            self.tab3.setItem(row, 3, QTableWidgetItem(str(manuf_data)))
+
+# Assuming this is part of a PyQt application, you would create an instance of MyWindow
+# and start the PyQt application event loop.
+
+
+
+import asyncio
+from bleak import BleakScanner
+
+async def devices_in_vicinity() -> list:
+    devices = await BleakScanner.discover(timeout=5.0, return_adv=True)
+    dev_list = [
+        (d.address, adv_data.rssi, d.name, adv_data.manufacturer_data)
+        for address, (d, adv_data) in devices.items()]
+    return dev_list
+
+async def main() -> list:
+    dev_list = await devices_in_vicinity()
+    return dev_list  # return the list to be processed later
+
+
+
+
+=============================================================================
+# FIRST: discover the devices available in the vicinity
+# OUT:   Print device discovered: RSSI | addr | name | manufacturer data
+# async def devices_in_vicinity() -> list:
+#
+#     devices = await BleakScanner.discover(timeout = 10.0, return_adv = True)
+#
+#     # make a list of tuples containing the details of the scanned devices
+#     dev_list = [
+#     (d.address, adv_data.rssi, d.name, adv_data.manufacturer_data)
+#     for address, (d, adv_data) in devices.items()]
+#     return dev_list
+#
+# async def main():
+#
+#     print ("@ Bluetooth_script1 -> main loop...")
+#     dev_list = await devices_in_vicinity()
+#     print (dev_list)
+#     print ("Exiting Bluetooth_script1 lib")
+#     return dev_list
+#     # print (dev_count)
+#
+# asyncio.run(main())
+
+=====================================================================
+
+def rt_graph_update(self, plot_list):
+    """Update the graph with new RSSI values"""
+    if not plot_list:
+        return
+
+    time_stamps, rssi_list = plot_list  # Extract data
+
+    # Set X range dynamically
+    if time_stamps:
+        self.tab4.setXRange(min(time_stamps), max(time_stamps))
+
+    # Update the line plot
+    self.line.setData(time_stamps, rssi_list)
+
+====================================================================
+
+
+confusing me out"
+        # # once the user confirms the input send it as a signal to RT_rssi_util lib
+        # if done.clicked.connect(self.rt_graph_update):
+        #     input_tuple = (time, distance_spinbox, mac_id)
+        #     print (input_tuple)
+        #     # self.input_tuple_signal.emit(input_tuple)
+
+confusing me out"
+def setup_inputs(self):
+    input_layout = QFormLayout()
+
+    # Create input fields
+    time_min_spinbox = QSpinBox()
+    time_sec_spinbox = QSpinBox()
+    distance_spinbox = QSpinBox()
+    mac_id = QLineEdit()
+    self.inputs = QLineEdit()  # This is the combined display field (read-only)
+    self.inputs.setReadOnly(True)
+
+    done = QPushButton("Done")
+
+    # Initialize the list of values
+    self.values = ["", "", "", ""]  # To store min, sec, distance, mac_id
+
+    # Add fields to layout
+    input_layout.addRow("i/p given", self.inputs)
+    input_layout.addRow(done)
+    self.tab1.setLayout(input_layout)
+
+    # Connect individual signal value changes to the update function
+    time_min_spinbox.valueChanged.connect(lambda value: self.internal_update(0, value))
+    time_sec_spinbox.valueChanged.connect(lambda value: self.internal_update(1, value))
+    distance_spinbox.valueChanged.connect(lambda value: self.internal_update(2, value))
+    mac_id.textChanged.connect(lambda text: self.internal_update(3, text))
+
+    # Ensure update happens when signal is emitted
+    self.signal_cluster.connect(self.update_inputs_qline)
+
+def internal_update(self, index, value):
+    """Updates the combined signal when a value changes."""
+    self.values[index] = value
+    print(self.values)  # Debugging purposes
+    self.signal_cluster.emit(self.values)  # Emit updated list
+
+def update_inputs_qline(self, values):
+    """Updates the read-only QLineEdit with combined values."""
+    self.inputs.setText(f"Combined Values: {values}")
+
+
+confusing me out"
+from PyQt6.QtCore import QTimer
+
+def rt_graph_setup(self, values):
+    """ Set up or update the RSSI graph with a visible title """
+    print(f"Graph setup received values: {values}")  # Debugging
+
+    if not hasattr(self, "tab4"):  # Ensure the widget is initialized once
+        self.tab4 = pg.PlotWidget(labels={'left': 'RSSI (-dBm)', 'bottom': 'Time (s)'})
+        self.tab4.setBackground(pg.mkColor("k"))
+        self.tab4.addLegend()
+        self.tab4.showGrid(x=True, y=True)
+        self.tab4.setXRange(0, 120)
+        self.tab4.setYRange(-130, 0)
+        pen = pg.mkPen("black", width=2)
+        self.tab4.line = self.tab4.plot([], [], pen=pen, symbol="+", symbolSize=5, symbolBrush="g")
+
+        # 🚀 Add the graph to the layout (if missing)
+        if hasattr(self, "tab"):
+            self.tab.addWidget(self.tab4, 1, 1)  # Make sure the graph is added properly
+
+    # Ensure values have at least 3 elements before accessing index 2
+    dev_info = values[2] if len(values) > 2 and values[2] else "N/A"
+
+    # 🚀 **Set the title properly**
+    self.tab4.setTitle(f"RSSI graph for dev: {dev_info}")
+
+    # 🚀 **Force UI update after the event loop cycle**
+    QTimer.singleShot(0, self.force_update)  # Ensures the UI refreshes immediately
+
+    print(f"Graph title updated to: RSSI graph for dev: {dev_info}")  # Debugging
+
+# 🚀 Step 2️⃣ Create `force_update()` to refresh the UI
+def force_update(self):
+    """ Force the UI to update after title change """
+    self.tab4.repaint()  # Forces PyQt to refresh UI
+    self.tab4.update()   # Ensures immediate redraw
+
+
+
+
+confusing me out'
+def rt_graph_setup(self, values):
+    """ Update the RSSI graph title when values change """
+    print(f"Graph setup received values: {values}")  # Debugging
+
+    # Ensure tab4 is initialized
+    if not hasattr(self, "tab4"):
+        self.tab4 = pg.PlotWidget(labels={'left': 'RSSI (-dBm)', 'bottom': 'Time (s)'})
+        self.tab4.setBackground(pg.mkColor("k"))
+        self.tab4.addLegend()
+        self.tab4.showGrid(x=True, y=True)
+        self.tab4.setXRange(0, 120)
+        self.tab4.setYRange(-130, 0)
+        pen = pg.mkPen("black", width=2)
+        self.tab4.line = self.tab4.plot([], [], pen=pen, symbol="+", symbolSize=5, symbolBrush="g")
+
+    # Get device info from values safely
+    dev_info = values[2] if len(values) > 2 else "N/A"
+
+    # Update graph title
+    self.tab4.setTitle(f"RSSI graph for dev: {dev_info}")
+
+    print(f"Graph title updated: RSSI graph for dev: {dev_info}")  # Debugging
