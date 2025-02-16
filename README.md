@@ -74,10 +74,6 @@ All the files are saved under the following built-in naming convention:
 
 < mac id >_< distance >m_< scanning duration >_m_s.file format
 
-$$
-\text{<mac id>}\text{<distance>}\text{<scanning duration>}\text{.file format}
-$$
-
 The user can wish to change the name.
 
 1.  .csv Download:  
